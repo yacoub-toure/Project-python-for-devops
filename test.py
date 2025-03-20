@@ -1,29 +1,31 @@
 import unittest
-from utils import calculate_monthly_payment, calculate_total_cost
+from health_utils import calculate_bmi, calculate_bmr
 
-class TestLoanCalculatorUtils(unittest.TestCase):
-    def test_calculate_monthly_payment_with_interest(self):
-        loan_amount = 10000
-        duration_years = 5
-        annual_interest_rate = 5
-        expected_payment = 188.71
-        result = calculate_monthly_payment(loan_amount, duration_years, annual_interest_rate)
-        self.assertAlmostEqual(result, expected_payment, places=2)
+class TestHealthUtils(unittest.TestCase):
+    def test_calculate_bmi(self):
+        # Test d'un BMI normal
+        height = 1.75  # 175 cm
+        weight = 70      # 70 kg
+        expected_bmi = 70 / (1.75 ** 2)
+        self.assertAlmostEqual(calculate_bmi(height, weight), expected_bmi, places=2)
 
-    def test_calculate_monthly_payment_no_interest(self):
-        loan_amount = 10000
-        duration_years = 5
-        annual_interest_rate = 0
-        expected_payment = 166.67
-        result = calculate_monthly_payment(loan_amount, duration_years, annual_interest_rate)
-        self.assertAlmostEqual(result, expected_payment, places=2)
+    def test_calculate_bmr_male(self):
+        # Test du BMR pour un homme
+        height = 175    # 175 cm
+        weight = 70     # 70 kg
+        age = 30       # 30 ans
+        gender = 'male'
+        expected_bmr = 88.362 + (13.397 * 70) + (4.799 * 175) - (5.677 * 30)
+        self.assertAlmostEqual(calculate_bmr(height, weight, age, gender), expected_bmr, places=2)
 
-    def test_calculate_total_cost(self):
-        monthly_payment = 188.71
-        duration_years = 5
-        expected_total_cost = 11322.6
-        result = calculate_total_cost(monthly_payment, duration_years)
-        self.assertAlmostEqual(result, expected_total_cost, places=2)
+    def test_calculate_bmr_female(self):
+        # Test du BMR pour une femme
+        height = 160    # 160 cm
+        weight = 55     # 55 kg
+        age = 25       # 25 ans
+        gender = 'female'
+        expected_bmr = 447.593 + (9.247 * 55) + (3.098 * 160) - (4.330 * 25)
+        self.assertAlmostEqual(calculate_bmr(height, weight, age, gender), expected_bmr, places=2)
 
 if __name__ == '__main__':
     unittest.main()
